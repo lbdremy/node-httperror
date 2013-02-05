@@ -1,0 +1,25 @@
+{
+  "name": "HTTPError",
+  "version": "0.1.0",
+  "description": "HTTPError extends Error. var err = new HTTPError(statusCode);",
+  "main": "index.js",
+  "scripts": {
+    "test": "./node_modules/.bin/tap test/*"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git@github.com:lbdremy/node-HTTPError.git"
+  },
+  "keywords": [
+    "http",
+    "error",
+    "status",
+    "code"
+  ],
+  "author": "Rémy Loubradou <remyloubradou@gmail.com>",
+  "license": "MIT",
+  "readmeFilename": "README.md",
+  "devDependencies": {
+    "tap": "~0.4.0"
+  }
+}
