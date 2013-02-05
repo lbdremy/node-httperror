@@ -1,6 +1,6 @@
 {
   "name": "httperror",
-  "version": "0.1.0",
+  "version": "0.1.1",
   "description": "HTTPError extends Error. var err = new HTTPError(statusCode);",
   "main": "index.js",
   "scripts": {
@@ -8,7 +8,7 @@
   },
   "repository": {
     "type": "git",
-    "url": "git@github.com:lbdremy/node-HTTPError.git"
+    "url": "git@github.com:lbdremy/node-httperror.git"
   },
   "keywords": [
     "http",
