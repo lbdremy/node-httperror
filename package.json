@@ -1,5 +1,5 @@
 {
-  "name": "HTTPError",
+  "name": "httperror",
   "version": "0.1.0",
   "description": "HTTPError extends Error. var err = new HTTPError(statusCode);",
   "main": "index.js",

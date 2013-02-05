@@ -1,15 +1,15 @@
-# HTTPError - HTTPError class for node.js
+# httperror - HTTPError class for node.js
 
 ## Install
 
 ```sh
-npm install HTTPError
+npm install httperror
 ```
 
 ## Usage
 
 ```js
-var HTTPError = require('HTTPError'),
+var HTTPError = require('httperror'),
 	http = require('http');
 
 http.get('http://google.com',function(err,res){
