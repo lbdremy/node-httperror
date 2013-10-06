@@ -9,40 +9,42 @@ npm install httperror
 ## Usage
 
 ```js
-var HTTPError = require('httperror'),
-	http = require('http');
+var http = require('http');
+var HTTPError = require('httperror');
 
-http.get('http://google.com',function(err,res){
-	if(err) return console.error(err);
-	if(res.statusCode !== 200) return console.error(new HTTPError(res.statusCode));
-	res.on('end',function(){
-		console.log('end');
-	});
+var req = http.get('http://google.com',function(res){
+	var err = new HTTPError(req,res,'Querying google.com');
+	throw err;
 });
+// Output
+// HTTPError: Querying google.com
+// Request URL: http://google.com/
+// Request method: GET
+// Status code: 301 - Moved Permanently
+// Request headers:
+// host: google.com
+// Response headers:
+// location: http://www.google.com/
+// content-type: text/html; charset=UTF-8
+// date: Sun, 06 Oct 2013 23:22:07 GMT
+// expires: Tue, 05 Nov 2013 23:22:07 GMT
+// cache-control: public, max-age=2592000
+// server: gws
+// content-length: 219
+// x-xss-protection: 1; mode=block
+// x-frame-options: SAMEORIGIN
+// alternate-protocol: 80:quic
+//     at ClientRequest.<anonymous> (/home/lbdremy/workspace/nodejs/HTTPError/example/http.js:5:12)
+//     at ClientRequest.g (events.js:192:14)
+//     at ClientRequest.EventEmitter.emit (events.js:96:17)
+//     at HTTPParser.parserOnIncomingClient [as onIncoming] (http.js:1588:7)
+//     at HTTPParser.parserOnHeadersComplete [as onHeadersComplete] (http.js:111:23)
+//     at Socket.socketOnData [as ondata] (http.js:1491:20)
+//     at TCP.onread (net.js:404:27)
+
 ```
 
-__N.B:__ This constructor does not make any difference between the _"good or evil"_ status code.
-In the case you give a status code like `200`, the `HTTPError` object will be created without troubles but you will end up
-with that:
-
-```js
-
-var HTTPError = require('./../');
-
-var err = new HTTPError(200);
-throw err;
-
-// will give you
-// HTTPError: 200 - OK
-//    at Object.<anonymous> (/home/lbdremy/workspace/nodejs/HTTPError/example/internal-server-error.js:3:11)
-//    at Module._compile (module.js:449:26)
-//    at Object.Module._extensions..js (module.js:467:10)
-//    at Module.load (module.js:356:32)
-//    at Function.Module._load (module.js:312:12)
-//    at Module.runMain (module.js:492:10)
-//    at process.startup.processNextTick.process._tickCallback (node.js:244:9)
-
-```
+__N.B:__ This constructor does not make any difference between the _"good or bad"_ status code. It will create an error whatever request/response you give to its.
 
 ## Test
 
