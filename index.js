@@ -36,7 +36,13 @@ module.exports = HTTPError;
  */
 
 function HTTPError(req,res,message){
-	Error.call(this);
+	// N.B: Unfortunately the ES5 spec specifies that Error.call(this)
+	// must always return a new object, and therefore it cannot be used for inheritance
+	// See more section 15.11.1 of ECMA-262 5.1 Edition
+	// http://www.ecma-international.org/publications/files/ECMA-ST/Ecma-262.pdf
+	// Error.call(this);
+	// Here in order to capture the stack we use Error.captureStackTrace
+	// it sets this.stack
 	Error.captureStackTrace(this,arguments.callee);
 	this.name = 'HTTPError';
 

@@ -3,45 +3,58 @@
  */
 
 var test = require('tap').test,
-	STATUS_CODES = require('http').STATUS_CODES,
-	HTTPError = require('./../');
+    http = require('http'),
+    STATUS_CODES = http.STATUS_CODES,
+    HTTPError = require('./../');
 
 /**
- * Test suite - redo it with new API
+ * Create little hello server for test suite
  */
 
-// test('new HTTPError(404)',function(t){
-// 	var code = 404;
-// 	var err = new HTTPError(code);
-// 	t.equal(err.name,'HTTPError');
-// 	t.equal(err.message, code + ' - ' + STATUS_CODES[code]);
-// 	t.ok(err.stack);
-// 	t.end();
-// });
+var server = http.createServer(function (req, res) {
+  res.writeHead(500, {'Content-Type': 'text/plain'});
+  res.end('Oops something went wrong\n');
+})
 
-// test('new HTTPError(800) // 800 is an example of an unknown status code',function(t){
-// 	var code = 800;
-// 	var err = new HTTPError(code);
-// 	t.equal(err.name,'HTTPError');
-// 	t.equal(err.message, code + ' - Unknown status code');
-// 	t.ok(err.stack);
-// 	t.end();
-// });
+server.listen(1337, '127.0.0.1');
 
-// test('new HTTPError() // invalid status code',function(t){
-// 	var code;
-// 	var err = new HTTPError(code);
-// 	t.equal(err.name,'HTTPError');
-// 	t.equal(err.message,'undefined - Unknown status code');
-// 	t.ok(err.stack);
-// 	t.end();
-// });
+server.on('listening', function(){
 
-// test('new HTTPError("500") // accepts String',function(t){
-// 	var code = '500';
-// 	var err = new HTTPError(code);
-// 	t.equal(err.name,'HTTPError');
-// 	t.equal(err.message, code + ' - ' + STATUS_CODES[code]);
-// 	t.ok(err.stack);
-// 	t.end();
-// });
+    /**
+     * Test suite
+     */
+
+    test('new HTTPError(req, res, message)',function(t){
+        var req = http.get('http://127.0.0.1:1337',function(res){
+            res.setEncoding('utf-8');
+            var text = '';
+            res.on('data',function(chunk){
+                text += chunk;
+            });
+            res.on('end', function(){
+                res.body = text;
+                var err = new HTTPError(req,res,'Querying locahost');
+                t.equal(err.name,'HTTPError');
+                var expectedMessage = 'Querying locahost\r\n'
+                    + 'Request URL: http://127.0.0.1:1337/\r\n'
+                    + 'Request method: GET\r\n'
+                    + 'Status code: 500 - Internal Server Error\r\n'
+                    + 'Request headers: \r\n'
+                    + 'host: 127.0.0.1:1337\r\n'
+                    + 'Response headers: \r\n'
+                    + 'content-type: text/plain\r\n'
+                    + 'date: ' + res.headers.date + '\r\n'
+                    + 'connection: keep-alive\r\n'
+                    + 'transfer-encoding: chunked\r\n'
+                    + 'Response body: \r\n'
+                    + 'Oops something went wrong\n';
+                t.equal(err.message, expectedMessage);
+                t.ok(err.stack);
+                t.end();
+                server.close();
+            });
+        });
+    });
+
+});
+
