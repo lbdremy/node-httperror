@@ -1,6 +1,6 @@
 {
   "name": "httperror",
-  "version": "0.2.2",
+  "version": "0.2.3",
   "description": "HTTPError extends Error. var err = new HTTPError(req,res,'my message');",
   "main": "index.js",
   "scripts": {
